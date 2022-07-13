@@ -48,5 +48,29 @@ class DatePickerTest {
         assertEquals(datePicker(2021), "2021-12-31", "Previous year should return Dec31")
         assertEquals(datePicker(2019), "2019-06-30", "Previous n years should return Jun30")
         assertEquals(datePicker(2023), "2023-06-30", "Future year should return Jun30")
+
+        // this depends on the requirements:
+        assertEquals(datePicker(12023), "12023-06-30", "Year with more than 4 digits")
+        assertEquals(datePicker(123), "123-06-30", "Year with 3 digits")
+        assertEquals(datePicker(12), "12-06-30", "Year with 2 digits")
+        assertEquals(datePicker(1), "1-06-30", "Year with 1 digit")
+        assertEquals(datePicker(-123), "-123-06-30", "Negative year with less than 4 digits")
+        assertEquals(datePicker(-2023), "-2023-06-30", "Negative year with 4 digits")
+        assertEquals(datePicker(-12023), "-12023-06-30", "Negative year with more than 4 digits")
     }
+
+    /*
+    * Other possible tests:
+    * Submit the form without filling any data = should fail or return today
+    * Submit spaces instead of data = should work as above
+    * Submit non-numeric values  = should return an error
+    * Check emoji and Chinese letters in case the effect is different from above
+    * https://github.com/minimaxir/big-list-of-naughty-strings/blob/master/blns.txt
+    * Submit spaces at the edges of numbers = spaces should be trimmed, numbers should count as is and return correct values
+    * Check negative values = only negative year should be allowed, other fields should return error
+    * Try XSS <script>alert("it works")</script>
+    * Try SQLi 12'); DROP TABLE USERS;
+    * Check floating point dates = should return an error or drop the last part: 12.3 == 12
+    * Different numbers style: 012, 0x9, 0xb, 2e1
+    */
 }
